@@ -1,0 +1,84 @@
+
+classDiagram
+    class GroundEquipmentFactory {
+        <<interface>>
+        +createKit() Kit
+    }
+
+    class GroundEquipment {
+        <<utility>>
+    }
+
+    class Kit {
+        -String aircraftType
+        -Stairs stairs
+        -TowTractor towTractor
+        -CargoLoader cargoLoader
+        +getAircraftType() String
+        +getStairs() Stairs
+        +getTowTractor() TowTractor
+        +getCargoLoader() CargoLoader
+    }
+
+    class Stairs {
+        <<interface>>
+        +getDescription() String
+    }
+
+    class TowTractor {
+        <<interface>>
+        +getDescription() String
+    }
+
+    class CargoLoader {
+        <<interface>>
+        +getDescription() String
+    }
+
+    class AirbusA320Factory {
+        +createKit() Kit
+        -A320Stairs
+        -A320TowTractor
+        -A320CargoLoader
+    }
+
+    class ATR72Factory {
+        +createKit() Kit
+        -ATR72Stairs
+        -ATR72TowTractor
+        -ATR72CargoLoader
+    }
+
+    class WideBodyFactory {
+        +createKit() Kit
+        -WideBodyStairs
+        -WideBodyTowTractor
+        -WideBodyCargoLoader
+    }
+
+    class GroundHandlingDispatcher {
+        +dispatch(flightNumber, factory) void
+    }
+
+    AirbusA320Factory ..|> GroundEquipmentFactory
+    ATR72Factory ..|> GroundEquipmentFactory
+    WideBodyFactory ..|> GroundEquipmentFactory
+
+    AirbusA320Factory ..> Stairs : creates
+    AirbusA320Factory ..> TowTractor : creates
+    AirbusA320Factory ..> CargoLoader : creates
+
+    ATR72Factory ..> Stairs : creates
+    ATR72Factory ..> TowTractor : creates
+    ATR72Factory ..> CargoLoader : creates
+
+    WideBodyFactory ..> Stairs : creates
+    WideBodyFactory ..> TowTractor : creates
+    WideBodyFactory ..> CargoLoader : creates
+
+    Kit o-- Stairs
+    Kit o-- TowTractor
+    Kit o-- CargoLoader
+
+    GroundEquipment ..> Kit : contains
+    GroundHandlingDispatcher --> GroundEquipmentFactory : uses

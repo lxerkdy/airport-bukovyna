@@ -1,0 +1,52 @@
+
+classDiagram
+    class FlightPlan {
+        -String route
+        -String fuelCalculation
+        -String weatherReport
+        -List~String~ alternateAirports
+        -String pilotMessages
+        -String cargoData
+        -String specialInstructions
+        +getRoute() String
+        +getFuelCalculation() String
+        +getWeatherReport() String
+        +getAlternateAirports() List
+        +getPilotMessages() String
+        +getCargoData() String
+        +getSpecialInstructions() String
+        +toString() String
+    }
+
+    class FlightPlanBuilder {
+        <<interface>>
+        +setRoute(route) FlightPlanBuilder
+        +setFuelCalculation(value) FlightPlanBuilder
+        +setWeatherReport(value) FlightPlanBuilder
+        +setAlternateAirports(value) FlightPlanBuilder
+        +setPilotMessages(value) FlightPlanBuilder
+        +setCargoData(value) FlightPlanBuilder
+        +setSpecialInstructions(value) FlightPlanBuilder
+        +build() FlightPlan
+    }
+
+    class ConcreteFlightPlanBuilder {
+        -String route
+        -String fuelCalculation
+        -String weatherReport
+        -List~String~ alternateAirports
+        -String pilotMessages
+        -String cargoData
+        -String specialInstructions
+        +build() FlightPlan
+        +reset() void
+    }
+
+    class FlightPlanDirector {
+        +createRegularPassengerFlight(builder) FlightPlan
+        +createTrainingFlight(builder) FlightPlan
+    }
+
+    ConcreteFlightPlanBuilder ..|> FlightPlanBuilder : implements
+    FlightPlanDirector --> FlightPlanBuilder : uses
+    ConcreteFlightPlanBuilder ..> FlightPlan : creates
