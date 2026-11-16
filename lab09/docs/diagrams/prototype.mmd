@@ -1,0 +1,58 @@
+classDiagram
+    class Flight {
+        -String flightNumber
+        -String route
+        -LocalDate date
+        -AircraftConfiguration aircraft
+        -List passengers
+        +copyFor()
+        -copyPassengers()
+        +changeMealMenu()
+        +addPassenger()
+        +blockSeat()
+        +printInfo()
+    }
+
+    class AircraftConfiguration {
+        -String aircraftType
+        -CabinLayout cabin
+        -List crew
+        -Map baggageNorms
+        -MealMenu mealMenu
+        +deepCopy()
+    }
+
+    class CabinLayout {
+        -List seats
+        +deepCopy()
+        +blockSeat()
+    }
+
+    class Seat {
+        -String number
+        -boolean blocked
+        +deepCopy()
+    }
+
+    class Passenger {
+        -String name
+        -String seatNumber
+        +deepCopy()
+    }
+
+    class MealMenu {
+        -List meals
+        +deepCopy()
+        +setMeals()
+    }
+
+    class ConsoleLogger {
+        +log()
+    }
+
+    Flight "1" *-- "1" AircraftConfiguration : contains
+    Flight "1" *-- "0..*" Passenger : contains
+    AircraftConfiguration "1" *-- "1" CabinLayout : contains
+    AircraftConfiguration "1" *-- "1" MealMenu : contains
+    CabinLayout "1" *-- "1..*" Seat : contains
+    Flight ..> ConsoleLogger : logs events

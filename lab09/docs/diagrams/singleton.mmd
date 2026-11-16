@@ -1,0 +1,21 @@
+classDiagram
+    class FlightControlCenter {
+        -FlightControlCenter INSTANCE$
+    }
+
+    class Runway {
+        -int number
+        -String flightNumber
+        -String operation
+        +Runway(int number)
+        +boolean isFree()
+        +boolean reserve(String flightNumber, String operation)
+        +void release()
+    }
+
+    class ConsoleLogger {
+        +void log(String source, String message)
+    }
+
+    FlightControlCenter "1" *-- "1..*" Runway : manages
+    FlightControlCenter ..> ConsoleLogger : logs events
