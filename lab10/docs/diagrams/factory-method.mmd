@@ -1,0 +1,72 @@
+classDiagram
+    class PassengerNotifier {
+        <<abstract, Creator>>
+        +notifyPassengers(flightNumber, details) void
+        #createMessage(flightNumber, details)* NotificationMessage
+    }
+
+    class NotificationMessage {
+        <<interface, Product>>
+        +getChannelName() String
+        +render() String
+        +send() void
+    }
+
+    class SmsNotifier {
+        <<ConcreteCreator>>
+        #createMessage(flightNumber, details) NotificationMessage
+    }
+
+    class EmailNotifier {
+        <<ConcreteCreator>>
+        #createMessage(flightNumber, details) NotificationMessage
+    }
+
+    class BoardNotifier {
+        <<ConcreteCreator>>
+        #createMessage(flightNumber, details) NotificationMessage
+    }
+
+    class MobileAppNotifier {
+        <<ConcreteCreator>>
+        #createMessage(flightNumber, details) NotificationMessage
+    }
+
+    class SmsMessage {
+        <<ConcreteProduct>>
+        -String text
+    }
+
+    class EmailMessage {
+        <<ConcreteProduct>>
+        -String subject
+        -String body
+    }
+
+    class BoardMessage {
+        <<ConcreteProduct>>
+        -String line
+    }
+
+    class MobileAppMessage {
+        <<ConcreteProduct>>
+        -String title
+        -String text
+    }
+
+    SmsNotifier --|> PassengerNotifier
+    EmailNotifier --|> PassengerNotifier
+    BoardNotifier --|> PassengerNotifier
+    MobileAppNotifier --|> PassengerNotifier
+
+    SmsMessage ..|> NotificationMessage
+    EmailMessage ..|> NotificationMessage
+    BoardMessage ..|> NotificationMessage
+    MobileAppMessage ..|> NotificationMessage
+
+    SmsNotifier ..> SmsMessage : creates
+    EmailNotifier ..> EmailMessage : creates
+    BoardNotifier ..> BoardMessage : creates
+    MobileAppNotifier ..> MobileAppMessage : creates
+
+    PassengerNotifier ..> NotificationMessage : uses
