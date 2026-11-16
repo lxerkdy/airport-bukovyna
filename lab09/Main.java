@@ -9,6 +9,8 @@ import prototype.Flight.MealMenu;
 import prototype.Flight.Passenger;
 import prototype.Flight.Seat;
 
+import pool.JetwayPool;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ public class Main {
     public static void main(String[] args) {
         runSingletonScenario();
         runPrototypeScenario();
+        runPoolScenario();
     }
 
     private static void runSingletonScenario() {
@@ -182,5 +185,28 @@ public class Main {
 
         System.out.println("\nТРЕТЯ КОПІЯ:");
         flight3.printInfo();
+    }
+
+    private static void runPoolScenario() {
+        ConsoleLogger.log("Main", "=== Завдання 3: Object Pool ===");
+
+        // 3 телетрапи, у черзі може чекати 1 рейс, решта їде автобусом
+        JetwayPool pool = new JetwayPool(3, 1);
+
+        // 5 рейсів прибувають майже одночасно
+        pool.request("PS-101");
+        pool.request("PS-102");
+        pool.request("PS-103");
+        pool.request("PS-104");
+        pool.request("PS-105");
+
+        // PS-101 звільняє телетрап, його отримує PS-104 з черги
+        pool.release("PS-101");
+
+        // Звільнений T-2 видається новому рейсу без підготовки
+        pool.release("PS-102");
+        pool.request("PS-106");
+
+        pool.printStatistics();
     }
 }
