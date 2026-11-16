@@ -8,13 +8,23 @@ import abstractfactory.ATR72Factory;
 import abstractfactory.WideBodyFactory;
 import abstractfactory.GroundHandlingDispatcher;
 
+import factorymethod.BoardNotifier;
+import factorymethod.EmailNotifier;
+import factorymethod.MobileAppNotifier;
+import factorymethod.PassengerNotifier;
+import factorymethod.SmsNotifier;
+
 import common.ConsoleLogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
         runBuilderScenario();
         runAbstractFactoryScenario();
+        runFactoryMethodScenario();
     }
 
     // Завдання 1. Builder
@@ -73,5 +83,34 @@ public class Main {
 
         // Обслуговування широкофюзеляжного літака
         dispatcher.dispatch("BUK-303", new WideBodyFactory());
+    }
+
+    // Завдання 3. Factory Method
+    private static void runFactoryMethodScenario() {
+        ConsoleLogger.log("Main", "=== FACTORY METHOD ===");
+
+        List<PassengerNotifier> notifiers = new ArrayList<>();
+        notifiers.add(new SmsNotifier());
+        notifiers.add(new EmailNotifier());
+        notifiers.add(new BoardNotifier());
+
+        // Затримка рейсу: SMS, e-mail і табло
+        ConsoleLogger.log("Main", "Рейс PS-101 затримується на 40 хвилин");
+
+        for (PassengerNotifier notifier : notifiers) {
+            notifier.notifyPassengers("PS-101", "затримка рейсу на 40 хвилин");
+        }
+
+        // Новий канал: один клас каналу й один клас повідомлення,
+        // загальний процес PassengerNotifier не змінюється
+        ConsoleLogger.log("Main", "Підключено канал «Мобільний застосунок»");
+        notifiers.add(new MobileAppNotifier());
+
+        // Зміна виходу на посадку: усі чотири канали
+        ConsoleLogger.log("Main", "Змінено вихід на посадку для рейсу PS-101");
+
+        for (PassengerNotifier notifier : notifiers) {
+            notifier.notifyPassengers("PS-101", "новий вихід на посадку: B3");
+        }
     }
 }
