@@ -1,0 +1,38 @@
+classDiagram
+    class WeatherProvider {
+        <<interface>>
+        +getTemperatureCelsius() double
+        +getWindSpeedMetersPerSecond() double
+        +getVisibilityMeters() double
+    }
+    class InternationalWeatherService {
+        +readTemperatureFahrenheit() double
+        +readWindSpeedKnots() double
+        +readVisibilityMiles() double
+    }
+    class WeatherAdapter {
+        -InternationalWeatherService service
+        +getTemperatureCelsius() double
+        +getWindSpeedMetersPerSecond() double
+        +getVisibilityMeters() double
+    }
+    class SecondWeatherService {
+        +fetchTemperatureKelvin() double
+        +fetchWindSpeedKmh() double
+        +fetchVisibilityFeet() double
+    }
+    class SecondWeatherAdapter {
+        -SecondWeatherService service
+        +getTemperatureCelsius() double
+        +getWindSpeedMetersPerSecond() double
+        +getVisibilityMeters() double
+    }
+    class FlightControlCenter {
+        -WeatherProvider weatherProvider
+        +checkWeatherForTakeoff(flightNumber) void
+    }
+    WeatherAdapter ..|> WeatherProvider
+    SecondWeatherAdapter ..|> WeatherProvider
+    WeatherAdapter --> InternationalWeatherService : adapts
+    SecondWeatherAdapter --> SecondWeatherService : adapts
+    FlightControlCenter --> WeatherProvider : uses

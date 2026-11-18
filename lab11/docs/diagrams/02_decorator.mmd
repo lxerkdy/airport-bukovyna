@@ -1,0 +1,31 @@
+classDiagram
+    class Ticket {
+        <<interface>>
+        +getDescription() String
+        +getPrice() double
+    }
+    class BasicTicket {
+        -flightNumber String
+        -passengerName String
+        -basePrice double
+    }
+    class TicketDecorator {
+        <<abstract>>
+        #Ticket ticket
+    }
+    class ExtraBaggage
+    class Insurance
+    class PriorityBoarding
+    class MealService
+    class SeatSelection {
+        -seatNumber String
+    }
+    Ticket <|.. BasicTicket
+    Ticket <|.. TicketDecorator
+    TicketDecorator <|-- ExtraBaggage
+    TicketDecorator <|-- Insurance
+    TicketDecorator <|-- PriorityBoarding
+    TicketDecorator <|-- MealService
+    TicketDecorator <|-- SeatSelection
+    TicketDecorator o--> Ticket : wraps
+    note for TicketDecorator "Each decorator delegates to the wrapped Ticket and adds description and price."

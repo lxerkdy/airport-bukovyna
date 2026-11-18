@@ -1,0 +1,11 @@
+flowchart TD
+    Client[Main client] --> Facade[PassengerRegistrationFacade<br/>registerPassenger]
+    Facade --> Docs[DocumentChecker<br/>Check passenger name and document]
+    Docs -->|valid| Seat[CabinPlacementService<br/>Assign seat]
+    Docs -->|invalid| StopDocs[Cancel registration]
+    Seat -->|available| Bag[BaggageAcceptanceService<br/>Accept baggage]
+    Seat -->|already reserved| StopSeat[Cancel registration]
+    Bag --> Pass[BoardingPassPrinter<br/>Print boarding pass]
+    Pass --> Border[BorderServiceNotifier<br/>Notify border service]
+    Border --> Done[Registration complete]
+    Facade -. optional reprint .-> Pass

@@ -1,0 +1,34 @@
+classDiagram
+    class FlightLog {
+        <<interface>>
+        +getFlightNumbers() List~String~
+        +getTelemetry(flightNumber, role) String
+    }
+    class FlightLogProxy {
+        -RealFlightLogArchive archive
+        -getArchive() RealFlightLogArchive
+        -hasAccess(role) boolean
+        +getFlightNumbers() List~String~
+        +getTelemetry(flightNumber, role) String
+    }
+    class RealFlightLogArchive {
+        -Map~String,String~ telemetryRecords
+        +getFlightNumbers() List~String~
+        +getTelemetry(flightNumber, role) String
+    }
+    class FlightReportModule {
+        -FlightLog flightLog
+        +showTelemetry(flightNumber, role) void
+    }
+    class UserRole {
+        <<enumeration>>
+        DISPATCHER
+        SAFETY
+        CASHIER
+    }
+    FlightLog <|.. FlightLogProxy
+    FlightLog <|.. RealFlightLogArchive
+    FlightLogProxy --> RealFlightLogArchive : creates on first authorized request
+    FlightReportModule --> FlightLog : uses
+    FlightLogProxy ..> UserRole : checks role
+    note for FlightLogProxy "DISPATCHER and SAFETY can read telemetry. CASHIER is denied without loading the archive."
