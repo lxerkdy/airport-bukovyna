@@ -3,6 +3,8 @@ import common.ConsoleLogger;
 
 import adapter.*;
 import decorator.*;
+import facade.PassengerRegistrationFacade;
+import proxy.*;
 
 public class Main {
 
@@ -11,6 +13,12 @@ public class Main {
         System.out.println();
 
         runDecoratorScenario();
+        System.out.println();
+
+        runFacadeScenario();
+        System.out.println();
+
+        runProxyScenario();
     }
 
     // Завдання 1. Adapter
@@ -85,5 +93,27 @@ public class Main {
                         "Загальна вартість: %.2f грн",
                         ticket.getPrice()
                 ));
+    }
+
+    // Завдання 3. Facade
+    private static void runFacadeScenario() {
+        ConsoleLogger.log("Main", "========== FACADE ==========");
+        PassengerRegistrationFacade registration =
+                new PassengerRegistrationFacade();
+        registration.registerPassenger("Марія", "AB123456",
+                "PS-303", "14B", 18.5);
+        registration.reprintBoardingPass("Марія", "PS-303", "14B");
+    }
+
+    // Завдання 4. Proxy
+    private static void runProxyScenario() {
+        ConsoleLogger.log("Main", "========== PROXY ==========");
+        FlightLogProxy proxy = new FlightLogProxy();
+        FlightReportModule reports = new FlightReportModule(proxy);
+
+        // Заборонений запит не завантажує архів.
+        reports.showTelemetry("PS-101", UserRole.CASHIER);
+        reports.showTelemetry("PS-101", UserRole.DISPATCHER);
+        reports.showTelemetry("PS-202", UserRole.SAFETY);
     }
 }
