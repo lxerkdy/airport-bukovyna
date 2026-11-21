@@ -1,0 +1,58 @@
+classDiagram
+    direction TB
+
+    class Passenger {
+        -String name
+        -String flightNumber
+        -FlightType flightType
+        -boolean boardingPassValid
+        -boolean passportValid
+        -boolean hasProhibitedItems
+        -double handLuggageWeight
+    }
+
+    class FlightType {
+        <<enumeration>>
+        DOMESTIC
+        INTERNATIONAL
+    }
+    
+    
+    class CheckHandler {
+        <<abstract>>
+        -CheckHandler nextHandler
+        +setNext(nextHandler) CheckHandler
+        +handle(passenger) void
+        #check(passenger) String
+    }
+
+    class BoardingPassCheck {
+        #check(passenger) String
+    }
+
+    class PassportControlCheck {
+        #check(passenger) String
+    }
+
+    class SecurityScreeningCheck {
+        #check(passenger) String
+    }
+
+    class HandLuggageWeightCheck {
+        -double MAX_WEIGHT
+        #check(passenger) String
+    }
+
+    class PreFlightChainFactory {
+        +createChain(flightType) CheckHandler
+    }
+
+    CheckHandler <|-- BoardingPassCheck
+    CheckHandler <|-- PassportControlCheck
+    CheckHandler <|-- SecurityScreeningCheck
+    CheckHandler <|-- HandLuggageWeightCheck
+
+    CheckHandler --> CheckHandler : nextHandler
+    Passenger --> FlightType
+    PreFlightChainFactory ..> CheckHandler
+    PreFlightChainFactory ..> FlightType
