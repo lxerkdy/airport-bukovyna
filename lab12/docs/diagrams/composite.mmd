@@ -1,0 +1,32 @@
+classDiagram
+    direction TB
+
+    class Cargo {
+        +getWeight() double
+        +getPieceCount() int
+        +printTree(indent) void
+    }
+
+    class CargoItem {
+        -name String
+        -weight double
+        +CargoItem(name, weight)
+        +getWeight() double
+        +getPieceCount() int
+        +printTree(indent) void
+    }
+
+    class CargoGroup {
+        -name String
+        -children List
+        +CargoGroup(name)
+        +add(cargo) void
+        +remove(cargo) void
+        +getWeight() double
+        +getPieceCount() int
+        +printTree(indent) void
+    }
+
+    Cargo <|.. CargoItem
+    Cargo <|.. CargoGroup
+    CargoGroup "1" *-- "0..*" Cargo

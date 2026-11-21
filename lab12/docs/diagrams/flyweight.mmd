@@ -1,0 +1,42 @@
+classDiagram
+    direction TB
+
+    class Seat {
+        -row int
+        -letter char
+        -passengerName String
+        -seatType SeatType
+        +Seat(row, letter, passengerName, seatType)
+        +getSeatType() SeatType
+        +printDetails(flightNumber) void
+    }
+
+    class SeatType {
+        -name String
+        -description String
+        -seatWidth double
+        -seatPitch double
+        -reclineAngle int
+        -amenities List
+        -image String
+        +SeatType(...)
+        +getName() String
+        +printDetails() void
+    }
+
+    class SeatTypeFactory {
+        -seatTypes Map
+        +getSeatType(category) SeatType
+        +getCreatedTypesCount() int
+    }
+
+    class SeatCategory {
+        <<enumeration>>
+        ECONOMY
+        COMFORT
+        BUSINESS
+    }
+
+    Seat --> SeatType : uses
+    SeatTypeFactory --> SeatType : creates and stores
+    SeatTypeFactory --> SeatCategory : uses
