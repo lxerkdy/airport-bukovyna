@@ -1,0 +1,84 @@
+classDiagram
+    direction TB
+
+    class FlightBoard {
+        <<Abstraction>>
+        #device DisplayDevice
+        #flights List~Flight~
+        #FlightBoard(device, flights)
+        +setDevice(device) void
+        +getDevice() DisplayDevice
+        +show() void
+        #getTitle() String
+        #buildLines() List~String~
+    }
+
+    class DepartureBoard {
+        <<RefinedAbstraction>>
+        +DepartureBoard(device, flights)
+        #getTitle() String
+        #buildLines() List~String~
+    }
+
+    class ArrivalBoard {
+        <<RefinedAbstraction>>
+        +ArrivalBoard(device, flights)
+        #getTitle() String
+        #buildLines() List~String~
+    }
+
+    class GateBoard {
+        <<RefinedAbstraction>>
+        +GateBoard(device, flights)
+        #getTitle() String
+        #buildLines() List~String~
+    }
+
+    class DisplayDevice {
+        <<Implementor>>
+        +getName() String
+        +render(title, lines) void
+    }
+
+    class LedPanel {
+        <<ConcreteImplementor>>
+        +getName() String
+        +render(title, lines) void
+    }
+
+    class LcdScreen {
+        <<ConcreteImplementor>>
+        +getName() String
+        +render(title, lines) void
+    }
+
+    class MobileApp {
+        <<ConcreteImplementor>>
+        +getName() String
+        +render(title, lines) void
+    }
+
+    class Projector {
+        <<ConcreteImplementor>>
+        +getName() String
+        +render(title, lines) void
+    }
+
+    class Flight {
+        <<record>>
+        -code String
+        -city String
+        -time String
+        -gate String
+        -status String
+    }
+
+    FlightBoard <|-- DepartureBoard
+    FlightBoard <|-- ArrivalBoard
+    FlightBoard <|-- GateBoard
+    FlightBoard "*" o-- "1" DisplayDevice : device (міст)
+    FlightBoard "1" o-- "0..*" Flight : flights
+    DisplayDevice <|.. LedPanel
+    DisplayDevice <|.. LcdScreen
+    DisplayDevice <|.. MobileApp
+    DisplayDevice <|.. Projector
