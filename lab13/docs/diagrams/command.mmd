@@ -1,0 +1,100 @@
+classDiagram
+    direction TB
+
+    class Flight {
+        -String flightNumber
+        -LocalTime departureTime
+        -String gate
+        -boolean cancelled
+        +getFlightNumber() String
+        +getDepartureTime() LocalTime
+        +getGate() String
+        +isCancelled() boolean
+        +setDepartureTime(time) void
+        +setGate(gate) void
+        +setCancelled(value) void
+    }
+
+    class Schedule {
+        <<Receiver>>
+        -Map~String, Flight~ flights
+        +addFlight(flight) void
+        +getFlight(flightNumber) Flight
+        +print() void
+    }
+
+    class ScheduleCommand {
+        <<interface>>
+        <<Command>>
+        +execute() void
+        +undo() void
+        +describe() String
+    }
+
+    class RescheduleFlightCommand {
+        <<ConcreteCommand>>
+        -Schedule schedule
+        -String flightNumber
+        -LocalTime newTime
+        -LocalTime oldTime
+        +execute() void
+        +undo() void
+        +describe() String
+    }
+
+    class ChangeGateCommand {
+        <<ConcreteCommand>>
+        -Schedule schedule
+        -String flightNumber
+        -String newGate
+        -String oldGate
+        +execute() void
+        +undo() void
+        +describe() String
+    }
+
+    class CancelFlightCommand {
+        <<ConcreteCommand>>
+        -Schedule schedule
+        -String flightNumber
+        -boolean wasCancelled
+        +execute() void
+        +undo() void
+        +describe() String
+    }
+
+    class DispatcherConsole {
+        <<Invoker>>
+        -String dispatcherName
+        -Deque~ScheduleCommand~ history
+        -Queue~ScheduleCommand~ pending
+        -List~String~ journal
+        +execute(command) void
+        +undoLast() void
+        +enqueue(command) void
+        +executeBatch() void
+        +printJournal() void
+        -record(status, command) void
+    }
+
+    class Main {
+        <<Client>>
+        -runDispatcherOperations()$ void
+        +main(args)$ void
+    }
+
+    ScheduleCommand <|.. RescheduleFlightCommand
+    ScheduleCommand <|.. ChangeGateCommand
+    ScheduleCommand <|.. CancelFlightCommand
+
+    Schedule "1" *-- "0..*" Flight : flights
+    RescheduleFlightCommand "*" --> "1" Schedule : schedule
+    ChangeGateCommand "*" --> "1" Schedule : schedule
+    CancelFlightCommand "*" --> "1" Schedule : schedule
+
+    DispatcherConsole "1" o-- "0..*" ScheduleCommand : history (стек)
+    DispatcherConsole "1" o-- "0..*" ScheduleCommand : pending (черга)
+
+    Main ..> DispatcherConsole
+    Main ..> Schedule
+    Main ..> ScheduleCommand : створює
